@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Bouhaddi\DriveWell\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class DriveWellCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'drivewell';
 
     public $description = 'My command';
 
