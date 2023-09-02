@@ -1,5 +1,6 @@
 # DriveWell is a Laravel Domain Driven Design Package 🚗
-DriveWell is a Laravel Package that will help you build and maintain a high level Domain Driven Design application
+DriveWell is a Laravel Package that will help you build and maintain a high level Domain Driven Design application.
+The Package will guide you to respect Domain Driven Design Architecture and will also warn you if you don't.
 
 - Create DDD Laravel Application
 - Author: Amine Bouhaddi 
