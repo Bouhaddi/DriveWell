@@ -1,0 +1,19 @@
+<?php
+
+namespace {{ Namespace }};
+
+use Illuminate\Database\Eloquent\Model;
+
+class {{ ClassName }} extends Model
+{
+    // Define your model properties and relationships here
+    protected $fillable = [
+        // List the fields that can be mass-assigned here
+    ];
+
+    protected $guarded = [
+        // List any fields that should NOT be mass-assigned here
+    ];
+
+    // Define your relationships, attributes, scopes, etc. here
+}
