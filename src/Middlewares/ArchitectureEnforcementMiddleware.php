@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ArchitectureEnforcementMiddleware
 {
@@ -11,37 +12,51 @@ class ArchitectureEnforcementMiddleware
     {
         $response = $next($request);
 
-        // Check if the controller uses a class within a 'Models' namespace
-        $this->checkControllerForModelUsage($request);
+        // Get all domain folders dynamically
+        $domainFolders = $this->getDomainFolders();
+
+        // Check controllers in each domain for model usage
+        foreach ($domainFolders as $domainFolder) {
+            $this->checkControllersInDomainForModelUsage($domainFolder);
+        }
 
         return $response;
     }
 
-    private function checkControllerForModelUsage(Request $request)
+    private function getDomainFolders()
     {
-        $action = $request->route()->getAction();
+        // Directory where domain folders are located
+        $domainsDirectory = app_path('Domain');
 
-        if ($this->controllerUsesModelOrDerivedClass($action)) {
-            dd('Controller uses a class within a "Models" namespace. Accessing models is not allowed.');
+        // Scan for subdirectories (domain folders)
+        $domainFolders = [];
+        if (File::isDirectory($domainsDirectory)) {
+            $domainFolders = File::directories($domainsDirectory);
+        }
+
+        return $domainFolders;
+    }
+
+    private function checkControllersInDomainForModelUsage($domainFolder)
+    {
+        // Get the domain folder name
+        $domainFolderName = basename($domainFolder);
+
+        // Define the namespace for controllers in this domain
+        $controllerNamespace = "App\\Domain\\$domainFolderName\\Controllers";
+
+        // Scan for controller files in the domain folder
+        $controllerFiles = File::glob("$domainFolder/Controllers/*.php");
+
+        // Check each controller for model usage
+        foreach ($controllerFiles as $controllerFile) {
+            $this->checkControllerForModelUsage($controllerFile, $controllerNamespace);
         }
     }
 
-    private function controllerUsesModelOrDerivedClass(array $action)
+    private function checkControllerForModelUsage($controllerFile, $controllerNamespace)
     {
-        $controller = class_basename($action['controller']);
-        [$controllerName] = explode('@', $controller);
-
-        // Get the controller class name
-        $controllerClass = "App\\Http\\Controllers\\$controllerName";
-
-        // Load the controller class file
-        $controllerFileName = app_path("Http/Controllers/$controllerName.php");
-
-        if (!file_exists($controllerFileName)) {
-            return false;
-        }
-
-        $controllerCode = file_get_contents($controllerFileName);
+        $controllerCode = file_get_contents($controllerFile);
 
         // Extract all 'use' statements from the controller code
         preg_match_all('/^use\s+(.*?);$\\s*/m', $controllerCode, $matches);
@@ -49,10 +64,8 @@ class ArchitectureEnforcementMiddleware
         // Check if any of the 'use' statements reference classes within a 'Models' namespace
         foreach ($matches[1] as $useStatement) {
             if (strpos($useStatement, 'Models\\') !== false) {
-                return true;
+                dd("Controller in namespace $controllerNamespace uses a class within a 'Models' namespace. Accessing models is not allowed.");
             }
         }
-
-        return false;
     }
 }
