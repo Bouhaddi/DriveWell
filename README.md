@@ -1,4 +1,4 @@
-# DriveWell is a Laravel Package to build and maintain a high level Domain Driven Design application
+# DriveWell is a Laravel Domain Driven Design Package 🚗
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/bouhaddi/drivewell.svg?style=flat-square)](https://packagist.org/packages/bouhaddi/drivewell)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/bouhaddi/drivewell/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/bouhaddi/drivewell/actions?query=workflow%3Arun-tests+branch%3Amain)
