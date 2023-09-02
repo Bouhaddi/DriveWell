@@ -63,8 +63,12 @@ class ArchitectureEnforcementMiddleware
 
         // Check if any of the 'use' statements reference classes within a 'Models' namespace
         foreach ($matches[1] as $useStatement) {
+            if (strpos($useStatement, 'Repositories\\') !== false) {
+                throw new \Exception("Controller in namespace $controllerNamespace uses a class within a 'Repositories' namespace. Accessing Repositories from the controller is not allowed.");
+            }
+
             if (strpos($useStatement, 'Models\\') !== false) {
-                dd("Controller in namespace $controllerNamespace uses a class within a 'Models' namespace. Accessing models is not allowed.");
+                throw new \Exception("Controller in namespace $controllerNamespace uses a class within a 'Models' namespace. Accessing models is not allowed.");
             }
         }
     }
