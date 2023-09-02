@@ -1,38 +1,58 @@
 <?php
 
-namespace Bouhaddi\DriveWell\Middlewares;
+namespace App\Http\Middleware;
 
 use Closure;
-use ReflectionClass;
+use Illuminate\Http\Request;
 
 class ArchitectureEnforcementMiddleware
 {
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
-        // Get the caller class name
-        $callerClassName = $this->getCallerClassName();
+        $response = $next($request);
 
-        if ($this->isInvalidCall($callerClassName)) {
-            throw new \Exception('Invalid architecture: Models should only be called by repositories or classes extending Model.');
-        }
+        // Check if the controller uses a class within a 'Models' namespace
+        $this->checkControllerForModelUsage($request);
 
-        return $next($request);
+        return $response;
     }
 
-    private function getCallerClassName()
+    private function checkControllerForModelUsage(Request $request)
     {
-        $trace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
+        $action = $request->route()->getAction();
 
-        if (isset($trace[1]['object'])) {
-            return get_class($trace[1]['object']);
+        if ($this->controllerUsesModelOrDerivedClass($action)) {
+            dd('Controller uses a class within a "Models" namespace. Accessing models is not allowed.');
         }
-
-        return '';
     }
 
-    private function isInvalidCall(string $callerClassName)
+    private function controllerUsesModelOrDerivedClass(array $action)
     {
-        // Check if it's not a repository and doesn't extend Model
-        return !strpos($callerClassName, '\\Repositories\\') !== false && !is_subclass_of($callerClassName, 'Illuminate\Database\Eloquent\Model');
+        $controller = class_basename($action['controller']);
+        [$controllerName] = explode('@', $controller);
+
+        // Get the controller class name
+        $controllerClass = "App\\Http\\Controllers\\$controllerName";
+
+        // Load the controller class file
+        $controllerFileName = app_path("Http/Controllers/$controllerName.php");
+
+        if (!file_exists($controllerFileName)) {
+            return false;
+        }
+
+        $controllerCode = file_get_contents($controllerFileName);
+
+        // Extract all 'use' statements from the controller code
+        preg_match_all('/^use\s+(.*?);$\\s*/m', $controllerCode, $matches);
+
+        // Check if any of the 'use' statements reference classes within a 'Models' namespace
+        foreach ($matches[1] as $useStatement) {
+            if (strpos($useStatement, 'Models\\') !== false) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
