@@ -1,8 +1,8 @@
 <?php
 
-namespace Bouhaddi\DriveWell\Engine\Generators;
+namespace Bouhaddi\DriveWell\Engines\Generators;
 
-use Bouhaddi\DriveWell\Engine\Abstracts\AbstractControllerGenerator;
+use Bouhaddi\DriveWell\Engines\Abstracts\AbstractControllerGenerator;
 
 class ControllerGenerator extends AbstractControllerGenerator
 {
