@@ -2,9 +2,9 @@
 
 namespace Bouhaddi\DriveWell;
 
+use Bouhaddi\DriveWell\Commands\DriveWellCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Bouhaddi\DriveWell\Commands\DriveWellCommand;
 
 class DriveWellServiceProvider extends PackageServiceProvider
 {

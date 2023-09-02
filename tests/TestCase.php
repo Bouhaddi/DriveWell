@@ -2,9 +2,9 @@
 
 namespace Bouhaddi\DriveWell\Tests;
 
+use Bouhaddi\DriveWell\DriveWellServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Bouhaddi\DriveWell\DriveWellServiceProvider;
 
 class TestCase extends Orchestra
 {
