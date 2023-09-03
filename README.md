@@ -36,10 +36,13 @@ return [
 
 Make your own domain:
 
+
 ```php
 php artisan domain {name}
 
+
 Generate Controller or Model:
+
 
 ```php
 php artisan domain {name} --controller={ControllerName} --model={ModelName} --repository={RepositoryName}
