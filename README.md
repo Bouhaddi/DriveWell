@@ -57,7 +57,6 @@ php artisan vendor:publish --tag="drivewell-views"
 
 ```php
 $driveWell = new Bouhaddi\DriveWell();
-echo $driveWell->echoPhrase('Hello, Bouhaddi!');
 ```
 
 ## Testing
