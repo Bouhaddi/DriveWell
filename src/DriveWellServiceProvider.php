@@ -23,8 +23,10 @@ class DriveWellServiceProvider extends PackageServiceProvider
             ->hasCommand(DriveWellCommand::class);
     }
 
-    public function boot()
+     public function boot(): void
     {
+        parent::boot();
+
         $this->publishRoute();
     }
 
@@ -35,9 +37,14 @@ class DriveWellServiceProvider extends PackageServiceProvider
      */
     protected function publishRoute(): void
     {
-        \Illuminate\Support\Facades\Route::get('/license', function () {
-            return "This software architecture has been made by Amine Bouhaddi";
-        });
+        $routeContent = "\nRoute::get('/license', function () {
+            return 'This software architecture has been made by Amine Bouhaddi';
+        });\n";
+
+        $routeFile = base_path('routes/web.php');
+
+        // Append route definition to web.php
+        File::append($routeFile, $routeContent);
     }
     
 }
