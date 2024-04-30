@@ -23,3 +23,4 @@ class DriveWellServiceProvider extends PackageServiceProvider
             ->hasCommand(DriveWellCommand::class);
     }
 }
+ 
