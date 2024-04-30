@@ -3,6 +3,7 @@
 namespace Bouhaddi\DriveWell;
 
 use Bouhaddi\DriveWell\Commands\DriveWellCommand;
+use Illuminate\Support\Facades\File;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
