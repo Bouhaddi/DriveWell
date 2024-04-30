@@ -22,5 +22,23 @@ class DriveWellServiceProvider extends PackageServiceProvider
             ->hasMigration('create_drivewell_table')
             ->hasCommand(DriveWellCommand::class);
     }
+
+    public function boot()
+    {
+        $this->publishRoute();
+    }
+
+    /**
+     * Publish a route after installation
+     *
+     * @return void
+     */
+    protected function publishRoute(): void
+    {
+        \Illuminate\Support\Facades\Route::get('/license', function () {
+            return "This software architecture has been made by Amine Bouhaddi";
+        });
+    }
+    
 }
  
